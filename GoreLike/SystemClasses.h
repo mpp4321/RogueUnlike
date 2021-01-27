@@ -11,12 +11,20 @@
 #include "SDL_image.h"
 
 struct WorldPositionComponent {
+	WorldPositionComponent(size_t _x, size_t _y) : x(_x), y(_y) {};
     size_t x, y;
 };
 
+//Flag to render a worldcomponent
+struct WorldComponentRender {};
+
+struct ScreenTransform {
+	int transform_x, transform_y;
+};
+
+//Basically "single sprite Renderable"
 struct StaticSpriteComponent {
 	std::string id;
-	int transform_x, transform_y;
 };
 
 class StaticSpriteDictionary {
@@ -99,6 +107,7 @@ public:
 	void initialize_graphics();
 	void draw_image(SDL_Rect& dest, SDL_Surface* img);
 	void update();
+	void clear();
 
 	~GraphicsContext() {
 		free_resources();

@@ -36,3 +36,8 @@ void GraphicsContext::update()
 {
 	SDL_UpdateWindowSurface(window);
 }
+
+void GraphicsContext::clear()
+{
+	SDL_FillRect(windowSurface, NULL, SDL_MapRGB(windowSurface->format, 0, 0, 0));
+}
