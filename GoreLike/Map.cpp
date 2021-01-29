@@ -10,7 +10,8 @@ MapComponent::MapComponent(entt::registry& reg, size_t width, size_t height) : _
 			entt::entity creating = create_map_entity(j, i);
 			auto& ssc = reg.emplace<StaticSpriteComponent>(creating);
 			ssc.id = "brown_ooze";
-			tiles.push_back(std::unordered_set<entt::entity>{  });
+			tiles.push_back(std::unordered_set<entt::entity>{ creating });
+			global_set.insert(creating);
 		}
 	}
 
@@ -18,7 +19,12 @@ MapComponent::MapComponent(entt::registry& reg, size_t width, size_t height) : _
 
 MapComponent::~MapComponent()
 {
-	_reg->destroy(global_set.begin(), global_set.end());
+	printf(
+		"Deconstructor in MapComponent\n"
+	);
+	for (auto ent : global_set) {
+		_reg->destroy(ent);
+	}
 }
 
 size_t MapComponent::width()

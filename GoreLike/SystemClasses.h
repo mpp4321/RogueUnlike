@@ -10,6 +10,8 @@
 #include "SDL.h"
 #include "SDL_image.h"
 
+struct WorldPositionControls {};
+
 struct WorldPositionComponent {
 	WorldPositionComponent(size_t _x, size_t _y) : x(_x), y(_y) {};
     size_t x, y;

@@ -66,12 +66,25 @@ void TestGameState::render(registry& reg)
 		SDL_Rect&& rect = SDL_Rect{ transform.transform_x, transform.transform_y, imgsurf->w, imgsurf->h };
 		_context.draw_image(rect, imgsurf);
 	}
-
 	_context.update();
 }
 
+#define MOVEMENT(x, y) \
+	for (auto entity : reg.view<WorldPositionControls, WorldPositionComponent>()) {\
+		movement(entt::handle(reg, entity), x, y);\
+	}\
+
 void TestGameState::update(registry& reg, float dt)
 {
+	static auto movement = [](entt::handle&& handle, int dx, int dy) {
+		auto& wpc = handle.get<WorldPositionComponent>();
+		auto mcv = handle.registry()->view<MapComponent>();
+		
+		//handle.patch<WorldPositionComponent>([&dx, &dy](WorldPositionComponent& comp) {
+		//	comp.x += dx;
+		//	comp.y += dy;
+		//});
+	};
 
 	if (polled_key == SDLK_q)
 	{
@@ -90,34 +103,40 @@ void TestGameState::update(registry& reg, float dt)
 
 	//Update code
 	if (polled_key == SDLK_d) {
-		for (auto z : reg.view<MapComponent>()) {
-			auto& mc = reg.get<MapComponent>(z);
-			lmbd_update(reg, mc.width() + 1, mc.height());
-			break;
-		}
+
+		MOVEMENT(1, 0);
+
+		//for (auto z : reg.view<MapComponent>()) {
+		//	auto& mc = reg.get<MapComponent>(z);
+		//	lmbd_update(reg, mc.width() + 1, mc.height());
+		//	break;
+		//}
 	}
 
 	if (polled_key == SDLK_a) {
-		for (auto z : reg.view<MapComponent>()) {
-			auto& mc = reg.get<MapComponent>(z);
-			lmbd_update(reg, mc.width() - 1, mc.height());
-			break;
-		}
+		MOVEMENT(-1, 0);
+		//for (auto z : reg.view<MapComponent>()) {
+		//	auto& mc = reg.get<MapComponent>(z);
+		//	lmbd_update(reg, mc.width() - 1, mc.height());
+		//	break;
+		//}
 	}
 
 	if (polled_key == SDLK_w) {
-		for (auto z : reg.view<MapComponent>()) {
-			auto& mc = reg.get<MapComponent>(z);
-			lmbd_update(reg, mc.width(), mc.height() + 1);
-			break;
-		}
+		MOVEMENT(0, -1);
+		//for (auto z : reg.view<MapComponent>()) {
+		//	auto& mc = reg.get<MapComponent>(z);
+		//	lmbd_update(reg, mc.width(), mc.height() - 1);
+		//	break;
+		//}
 	}
 
-	if (polled_key == SDLK_a) {
-		for (auto z : reg.view<MapComponent>()) {
-			auto& mc = reg.get<MapComponent>(z);
-			lmbd_update(reg, mc.width(), mc.height() - 1);
-			break;
-		}
+	if (polled_key == SDLK_s) {
+		MOVEMENT(0, 1);
+		//for (auto z : reg.view<MapComponent>()) {
+		//	auto& mc = reg.get<MapComponent>(z);
+		//	lmbd_update(reg, mc.width(), mc.height() + 1);
+		//	break;
+		//}
 	}
 }
