@@ -1,11 +1,11 @@
 #include "SystemClasses.h"
 
-void GraphicsContext::free_resources() {
+void graphics_context::free_resources() {
 	SDL_FreeSurface(windowSurface);
-	SDL_DestroyWindow(window);
+	//SDL_DestroyWindow(window);
 }
 
-void GraphicsContext::initialize_graphics() {
+void graphics_context::initialize_graphics() {
 
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
@@ -22,22 +22,21 @@ void GraphicsContext::initialize_graphics() {
 		}
 	}
 
-
 }
 
-void GraphicsContext::draw_image(SDL_Rect& dest, SDL_Surface* img)
+void graphics_context::draw_image(SDL_Rect& dest, SDL_Surface* img)
 {
 	if (SDL_BlitSurface(img, NULL, windowSurface, &dest) == -1) {
 		printf("Unsuccessful blit\n");
 	}
 }
 
-void GraphicsContext::update()
+void graphics_context::update()
 {
 	SDL_UpdateWindowSurface(window);
 }
 
-void GraphicsContext::clear()
+void graphics_context::clear()
 {
 	SDL_FillRect(windowSurface, NULL, SDL_MapRGB(windowSurface->format, 0, 0, 0));
 }

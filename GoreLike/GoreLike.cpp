@@ -12,13 +12,8 @@
 int main(int argc, char* args[])
 {
     entt::registry reg;
-    MapComponent wmc{ reg, 3, 3 };
-    { auto e = reg.create(); reg.emplace<MapComponent>(e, wmc); }
-    TestGameState gs{};
+    TestGameState gs{reg};
 
-    auto resource_path = "resources/dcssf/monster";
-    resource_tree_search_and_add(&gs.get_sprite_dict(), std::filesystem::current_path().append(resource_path));
-    gs.get_sprite_dict().print_loaded_textures();
 
     gs.start(reg);
     //GraphicsContext context;

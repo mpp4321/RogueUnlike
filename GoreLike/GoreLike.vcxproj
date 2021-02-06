@@ -79,8 +79,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <LibraryPath>C:\Users\mikeyp\Documents\SDL Lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>C:\Users\mikeyp\Documents\Entt Include File;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)libs;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)includes;$(ProjectDir)includes\tmxlite;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -122,8 +122,9 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\mikeyp\Documents\Entt Include File;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -152,15 +153,33 @@
     <ClCompile Include="GameStates.cpp" />
     <ClCompile Include="GoreLike.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="MapSystem.cpp" />
     <ClCompile Include="SystemClasses.cpp" />
+    <ClCompile Include="tiled_map_util.cpp" />
+    <ClCompile Include="tmxlite\detail\pugixml.cpp" />
+    <ClCompile Include="tmxlite\FreeFuncs.cpp" />
+    <ClCompile Include="tmxlite\ImageLayer.cpp" />
+    <ClCompile Include="tmxlite\LayerGroup.cpp" />
+    <ClCompile Include="tmxlite\Map.cpp" />
+    <ClCompile Include="tmxlite\miniz.c" />
+    <ClCompile Include="tmxlite\Object.cpp" />
+    <ClCompile Include="tmxlite\ObjectGroup.cpp" />
+    <ClCompile Include="tmxlite\Property.cpp" />
+    <ClCompile Include="tmxlite\TileLayer.cpp" />
+    <ClCompile Include="tmxlite\Tileset.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\Documents\Entt Include File\entt.hpp" />
     <ClInclude Include="FileUtil.h" />
     <ClInclude Include="GameStates.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="MapSystem.h" />
     <ClInclude Include="RandomUtil.h" />
     <ClInclude Include="SystemClasses.h" />
+    <ClInclude Include="tiled_map_util.h" />
+    <ClInclude Include="tmxlite\detail\pugiconfig.hpp" />
+    <ClInclude Include="tmxlite\detail\pugixml.hpp" />
+    <ClInclude Include="tmxlite\miniz.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

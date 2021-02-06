@@ -13,42 +13,105 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\tmxlite">
+      <UniqueIdentifier>{64a358a6-15f7-4a09-96b6-aeb267a19d51}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\main">
+      <UniqueIdentifier>{ad34450d-a192-4f84-a613-f6a8a591ba2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\main">
+      <UniqueIdentifier>{51656f14-26c2-4225-98dc-efc8d7abb681}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GoreLike.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="tmxlite\Map.cpp">
+      <Filter>Source Files\tmxlite</Filter>
     </ClCompile>
-    <ClCompile Include="GameStates.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="tmxlite\LayerGroup.cpp">
+      <Filter>Source Files\tmxlite</Filter>
     </ClCompile>
-    <ClCompile Include="SystemClasses.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="tmxlite\ImageLayer.cpp">
+      <Filter>Source Files\tmxlite</Filter>
+    </ClCompile>
+    <ClCompile Include="tmxlite\FreeFuncs.cpp">
+      <Filter>Source Files\tmxlite</Filter>
+    </ClCompile>
+    <ClCompile Include="tmxlite\miniz.c">
+      <Filter>Source Files\tmxlite</Filter>
+    </ClCompile>
+    <ClCompile Include="tmxlite\Object.cpp">
+      <Filter>Source Files\tmxlite</Filter>
+    </ClCompile>
+    <ClCompile Include="tmxlite\ObjectGroup.cpp">
+      <Filter>Source Files\tmxlite</Filter>
+    </ClCompile>
+    <ClCompile Include="tmxlite\Property.cpp">
+      <Filter>Source Files\tmxlite</Filter>
+    </ClCompile>
+    <ClCompile Include="tmxlite\detail\pugixml.cpp">
+      <Filter>Source Files\tmxlite</Filter>
+    </ClCompile>
+    <ClCompile Include="tmxlite\TileLayer.cpp">
+      <Filter>Source Files\tmxlite</Filter>
+    </ClCompile>
+    <ClCompile Include="tmxlite\Tileset.cpp">
+      <Filter>Source Files\tmxlite</Filter>
     </ClCompile>
     <ClCompile Include="FileUtil.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\main</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStates.cpp">
+      <Filter>Source Files\main</Filter>
+    </ClCompile>
+    <ClCompile Include="GoreLike.cpp">
+      <Filter>Source Files\main</Filter>
     </ClCompile>
     <ClCompile Include="Map.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\main</Filter>
+    </ClCompile>
+    <ClCompile Include="MapSystem.cpp">
+      <Filter>Source Files\main</Filter>
+    </ClCompile>
+    <ClCompile Include="SystemClasses.cpp">
+      <Filter>Source Files\main</Filter>
+    </ClCompile>
+    <ClCompile Include="tiled_map_util.cpp">
+      <Filter>Source Files\main</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\Documents\Entt Include File\entt.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameStates.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="tmxlite\miniz.h">
+      <Filter>Source Files\tmxlite</Filter>
     </ClInclude>
-    <ClInclude Include="SystemClasses.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="tmxlite\detail\pugiconfig.hpp">
+      <Filter>Source Files\tmxlite</Filter>
+    </ClInclude>
+    <ClInclude Include="tmxlite\detail\pugixml.hpp">
+      <Filter>Source Files\tmxlite</Filter>
     </ClInclude>
     <ClInclude Include="FileUtil.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\main</Filter>
     </ClInclude>
-    <ClInclude Include="RandomUtil.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="GameStates.h">
+      <Filter>Header Files\main</Filter>
     </ClInclude>
     <ClInclude Include="Map.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\main</Filter>
+    </ClInclude>
+    <ClInclude Include="MapSystem.h">
+      <Filter>Header Files\main</Filter>
+    </ClInclude>
+    <ClInclude Include="RandomUtil.h">
+      <Filter>Header Files\main</Filter>
+    </ClInclude>
+    <ClInclude Include="SystemClasses.h">
+      <Filter>Header Files\main</Filter>
+    </ClInclude>
+    <ClInclude Include="tiled_map_util.h">
+      <Filter>Header Files\main</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

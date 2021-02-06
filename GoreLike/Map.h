@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <unordered_map>
+#include <optional>
 #include "entt.hpp"
 
 /*
@@ -16,33 +17,30 @@
 #define TILE_SIZE 32
 
 /*
-	Component struct which tags non-passable entities
+
+	Tiles are a set of entities which exist on that tile and a solid flag to show if the tile can be moved onto
+
 */
-struct NonPassable {
+struct Tile {
+	std::optional<std::string> id;
+    std::unordered_set<entt::entity> entities;
+    bool isPassable = true;
 };
 
-struct WorldPositionComponent;
+struct world_position;
 
-class MapComponent
+/*
+
+MapComponent, a unique-component which exists under a handle within the MapSystem
+
+	- Contains data on what entities are where under "tiles" array as well as a width and height size
+
+*/
+class map_data
 {
-private:
-	std::unordered_set<entt::entity> global_set;
-	std::vector<std::unordered_set<entt::entity>> tiles;
-	size_t _width, _height;
-	entt::registry* _reg;
 public:
-	MapComponent(entt::registry& reg, size_t width, size_t height);
-	~MapComponent();
-	size_t width();
-	size_t height();
-	const std::unordered_set<entt::entity>& get_tile(int x, int y);
-	const std::unordered_set<entt::entity>& all_entities() const;
-	entt::entity create_map_entity(int x, int y);
-	void set_entity_world_position(int x, int y, const entt::entity& e);
-	void add_to_tile(int x, int y, const entt::entity& e);
-	void remove_from_tile(int x, int y, const entt::entity& e);
-	bool is_entity(const entt::entity& ent);
-	bool is_entity(int x, int y, const entt::entity& ent);
+	std::vector<Tile> tiles;
+	size_t width, height;
 };
 
 struct MapRendererFlag {};

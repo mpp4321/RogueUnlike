@@ -9,34 +9,46 @@
 #include <unordered_map>
 #include "SDL.h"
 #include "SDL_image.h"
+#include "entt.hpp"
 
-struct WorldPositionControls {};
+struct world_position_controllable {};
 
-struct WorldPositionComponent {
-	WorldPositionComponent(size_t _x, size_t _y) : x(_x), y(_y) {};
+struct bump_event {
+	//Function which is called when an entity bumps into owning entity
+	//Params are entity which bumped this one
+	entt::delegate<void(entt::entity)> call_back;
+};
+
+struct old_world_position {
+	old_world_position(size_t _x, size_t _y) : x(_x), y(_y) {};
+    size_t x, y;
+};
+
+struct world_position {
+	world_position(size_t _x, size_t _y) : x(_x), y(_y) {};
     size_t x, y;
 };
 
 //Flag to render a worldcomponent
-struct WorldComponentRender {};
+struct world_render {};
 
-struct ScreenTransform {
+struct screen_transform {
 	int transform_x, transform_y;
 };
 
 //Basically "single sprite Renderable"
-struct StaticSpriteComponent {
+struct static_sprite {
 	std::string id;
 };
 
-class StaticSpriteDictionary {
+class static_sprite_dic {
 private:
 	std::unordered_map<std::string, SDL_Surface*> texture_map;
 public:
-	StaticSpriteDictionary() {
+	static_sprite_dic() {
 	}
 
-	~StaticSpriteDictionary() {
+	~static_sprite_dic() {
 		for (auto [strin, surface] : texture_map) {
 			SDL_FreeSurface(surface);
 		}
@@ -73,19 +85,19 @@ public:
 
 };
 
-class SpriteSheet {
+class sprite_sheet {
 private:
 	SDL_Surface* image_src;
 	SDL_Rect image_rect;
 
 public:
 
-	SpriteSheet(const char* path, int width, int height) {
+	sprite_sheet(const char* path, int width, int height) {
 		image_src = SDL_LoadBMP(path);
 		image_rect.w = image_src->w / width;
 		image_rect.h = image_src->h / height;
 	}
-	~SpriteSheet() {
+	~sprite_sheet() {
 		SDL_FreeSurface(image_src);
 	}
 
@@ -100,7 +112,7 @@ public:
 
 };
 
-class GraphicsContext {
+class graphics_context {
 public:
 	SDL_Window* window;
 	SDL_Surface* windowSurface;
@@ -111,7 +123,7 @@ public:
 	void update();
 	void clear();
 
-	~GraphicsContext() {
+	~graphics_context() {
 		free_resources();
 	}
 };
