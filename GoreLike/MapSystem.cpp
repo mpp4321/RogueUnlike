@@ -7,14 +7,14 @@ MapSystem::MapSystem(map_data&& map_component, entt::registry& reg, size_t width
 	//We only call create_map_entity here in the initialization of the map so we are safe to add map_component_entity
 	mc_handle = entt::handle(reg, map_component_entity);
 	
-	for (int i = 0; i < height; i++) {
-		for (int j = 0; j < width; j++) {
-			//entt::entity creating = create_map_entity(j, i);
-			//auto& ssc = reg.emplace<static_sprite>(creating);
-			//ssc.id = "brown_ooze";
-			map_component.tiles.push_back(Tile{ std::optional("cobble_blood_3_old"), std::unordered_set<entt::entity> {}, true });
-		}
-	}
+	//for (int i = 0; i < height; i++) {
+	//	for (int j = 0; j < width; j++) {
+	//		//entt::entity creating = create_map_entity(j, i);
+	//		//auto& ssc = reg.emplace<static_sprite>(creating);
+	//		//ssc.id = "brown_ooze";
+	//		map_component.tiles.push_back(Tile{ std::optional("cobble_blood_3_old"), std::unordered_set<entt::entity> {}, true });
+	//	}
+	//}
 
 	{
 		entt::entity creating = create_map_entity(0, 0);

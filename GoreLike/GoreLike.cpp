@@ -6,7 +6,7 @@
 #include "SDL.h"
 #include "FileUtil.h"
 #include "GameStates.h"
-#include "Map.h"
+#include "MapComponents.h"
 #include <iostream>
 
 int main(int argc, char* args[])

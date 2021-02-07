@@ -1,4 +1,2 @@
-#include "Map.h"
+#include "MapComponents.h"
 #include "SystemClasses.h"
-
-

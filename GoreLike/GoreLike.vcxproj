@@ -122,7 +122,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\tmxlite\tmxlite\include;$(ProjectDir)includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
@@ -152,34 +152,25 @@
     <ClCompile Include="FileUtil.cpp" />
     <ClCompile Include="GameStates.cpp" />
     <ClCompile Include="GoreLike.cpp" />
-    <ClCompile Include="Map.cpp" />
+    <ClCompile Include="MapComponents.cpp" />
     <ClCompile Include="MapSystem.cpp" />
     <ClCompile Include="SystemClasses.cpp" />
     <ClCompile Include="tiled_map_util.cpp" />
-    <ClCompile Include="tmxlite\detail\pugixml.cpp" />
-    <ClCompile Include="tmxlite\FreeFuncs.cpp" />
-    <ClCompile Include="tmxlite\ImageLayer.cpp" />
-    <ClCompile Include="tmxlite\LayerGroup.cpp" />
-    <ClCompile Include="tmxlite\Map.cpp" />
-    <ClCompile Include="tmxlite\miniz.c" />
-    <ClCompile Include="tmxlite\Object.cpp" />
-    <ClCompile Include="tmxlite\ObjectGroup.cpp" />
-    <ClCompile Include="tmxlite\Property.cpp" />
-    <ClCompile Include="tmxlite\TileLayer.cpp" />
-    <ClCompile Include="tmxlite\Tileset.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\Documents\Entt Include File\entt.hpp" />
     <ClInclude Include="FileUtil.h" />
     <ClInclude Include="GameStates.h" />
-    <ClInclude Include="Map.h" />
+    <ClInclude Include="MapComponents.h" />
     <ClInclude Include="MapSystem.h" />
     <ClInclude Include="RandomUtil.h" />
     <ClInclude Include="SystemClasses.h" />
     <ClInclude Include="tiled_map_util.h" />
-    <ClInclude Include="tmxlite\detail\pugiconfig.hpp" />
-    <ClInclude Include="tmxlite\detail\pugixml.hpp" />
-    <ClInclude Include="tmxlite\miniz.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\tmxlite\tmxlite\tmxlite.vcxproj">
+      <Project>{0bc0c535-febb-4a83-8197-af74fa26e100}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

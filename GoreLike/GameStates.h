@@ -5,7 +5,7 @@
 #include "SystemClasses.h"
 #include "tiled_map_util.h"
 #include "FileUtil.h"
-#include "Map.h"
+#include "MapComponents.h"
 #include "MapSystem.h"
 #include "tmxlite/Map.hpp"
 

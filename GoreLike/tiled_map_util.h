@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Map.h"
+#include "MapComponents.h"
 #include "tmxlite/Map.hpp"
 #include "tmxlite/Layer.hpp"
 #include "tmxlite/TileLayer.hpp"
@@ -8,5 +8,5 @@
 
 class tiled_map_util {
 public:
-	static map_data&& initialize_map(tmx::Map& m);
+	static map_data initialize_map(tmx::Map& m);
 };

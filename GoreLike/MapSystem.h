@@ -1,7 +1,7 @@
 #pragma once
 
 #include "SystemClasses.h"
-#include "Map.h"
+#include "MapComponents.h"
 
 class MapSystem
 {
@@ -9,6 +9,7 @@ private:
 	//Map component handle
 	entt::handle mc_handle;
 public:
+	MapSystem() {};
 	MapSystem(map_data&& map_component, entt::registry& reg, size_t width, size_t height);
 	void on_position_update(entt::registry & reg, entt::entity ent);
 	const Tile& get_tile(int x, int y);

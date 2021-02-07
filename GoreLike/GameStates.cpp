@@ -3,13 +3,14 @@
 #define INIT_MAP_WIDTH 5
 #define INIT_MAP_HEIGHT 5
 
-TestGameState::TestGameState(entt::registry& reg) :
-	map_system(MapSystem(
-		map_data{ std::vector<Tile> {}, INIT_MAP_WIDTH, INIT_MAP_HEIGHT },
-		reg, INIT_MAP_WIDTH, INIT_MAP_HEIGHT))
+TestGameState::TestGameState(entt::registry& reg) /*:*/
+	//map_system(MapSystem(
+	//	map_data{ std::vector<Tile> {}, INIT_MAP_WIDTH, INIT_MAP_HEIGHT },
+	//	reg, INIT_MAP_WIDTH, INIT_MAP_HEIGHT))
 {
 	auto tmxMap = tmx::Map();
-	tmxMap.loadFromString("map1.tmx", std::filesystem::current_path().append("maps/").u8string());
+	auto mapDir = std::filesystem::current_path().append("resources\\maps\\map1.tmx").u8string();
+	tmxMap.load(mapDir);
 	map_data && mapd = tiled_map_util::initialize_map(tmxMap);
 	size_t w = mapd.width, h = mapd.height;
 	this->map_system = MapSystem(std::forward<map_data>(mapd), reg, w, h);
