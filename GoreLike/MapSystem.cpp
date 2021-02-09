@@ -37,6 +37,7 @@ void MapSystem::render(entt::registry& reg, graphics_context& context, static_sp
 	for (auto& tile : mc.tiles) {
 		if (tile.id.has_value()) {
 			SDL_Surface* imgsurf = dic.get_texture(*tile.id);
+			if (!imgsurf) continue;
 			int x = TILE_SIZE * (c % mc.height);
 			int y = TILE_SIZE * (c / mc.height);
 			SDL_Rect&& rect = SDL_Rect{ x, y, imgsurf->w, imgsurf->h };
@@ -106,6 +107,18 @@ entt::entity MapSystem::create_map_entity(int x, int y)
 	_reg->emplace<world_position>(ent, x, y);
 	_reg->emplace<old_world_position>(ent, x, y);
 	_reg->emplace<screen_transform>(ent, x*TILE_SIZE, y*TILE_SIZE);
+	return ent;
+}
+
+entt::entity MapSystem::create_map_entity(int x, int y, std::string id)
+{
+	entt::registry* _reg = mc_handle.registry();
+	entt::entity ent = _reg->create();
+	_reg->emplace<world_position>(ent, x, y);
+	_reg->emplace<old_world_position>(ent, x, y);
+	_reg->emplace<screen_transform>(ent, x*TILE_SIZE, y*TILE_SIZE);
+	_reg->emplace<static_sprite>(ent, static_sprite{ id });
+
 	return ent;
 }
 

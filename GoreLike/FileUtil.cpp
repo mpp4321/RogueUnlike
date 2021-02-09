@@ -9,6 +9,7 @@ void resource_tree_search_and_add(static_sprite_dic* dict, const std::filesystem
 		}
 		else {
 			if (p.path().has_extension() && p.path().extension() == ".png") {
+				//test_futures.push_back(std::async(std::launch::async, &static_sprite_dic::load_texture, *dict, p.path().u8string(), p.path().stem().u8string()));
 				dict->load_texture(p.path().u8string(), p.path().stem().u8string());
 			}
 		}

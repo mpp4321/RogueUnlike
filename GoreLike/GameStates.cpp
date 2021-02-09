@@ -23,7 +23,7 @@ TestGameState::TestGameState(entt::registry& reg) /*:*/
     resource_tree_search_and_add(&get_sprite_dict(), std::filesystem::current_path().append(resource_path), true);
     //resource_tree_search_and_add(&get_sprite_dict(), std::filesystem::current_path().append(resource_path_tiles));
 
-    get_sprite_dict().print_loaded_textures();
+    //get_sprite_dict().print_loaded_textures();
 
 	start(reg);
 }
@@ -70,6 +70,7 @@ void TestGameState::render(registry& reg)
 		auto& ssc = reg.get<static_sprite>(ent);
 		auto& transform = reg.get<screen_transform>(ent);
 		SDL_Surface* imgsurf = this->_sprite_dict.get_texture(ssc.id);
+		if (!imgsurf) continue;
 		SDL_Rect&& rect = SDL_Rect{ transform.transform_x, transform.transform_y, imgsurf->w, imgsurf->h };
 		_context.draw_image(rect, imgsurf);
 	}

@@ -10,6 +10,7 @@
 #include "SDL.h"
 #include "SDL_image.h"
 #include "entt.hpp"
+#include <future>
 
 struct world_position_controllable {};
 
@@ -44,6 +45,17 @@ struct static_sprite {
 class static_sprite_dic {
 private:
 	std::unordered_map<std::string, SDL_Surface*> texture_map;
+	std::vector<std::future<void>> _futures;
+	void _async_load_image(std::string path, std::string id) {
+		static std::mutex mu_texture;
+		//SDL_Surface* loaded_texture = IMG_Load(path.c_str());
+		SDL_Surface* loaded_texture = IMG_Load(path.c_str());
+		printf("Loaded an image\n");
+		std::lock_guard<std::mutex> load_lock(mu_texture);
+		if (loaded_texture) {
+			texture_map[id] = loaded_texture;
+		}
+	};
 public:
 	static_sprite_dic() {
 	}
@@ -71,16 +83,15 @@ public:
 		return (*iter).second;
 	}
 
+	//May return nullptr if texture is not yet loaded.
 	SDL_Surface* get_texture(std::string id) {
 		return texture_map[id];
 	}
 
-	SDL_Surface* load_texture(std::string path, std::string id) {
-		SDL_Surface* loaded_texture = IMG_Load(path.c_str());
-		if (loaded_texture) {
-			texture_map[id] = loaded_texture;
-		}
-		return loaded_texture;
+	/* Threadsafe load_texture */
+	void load_texture(std::string path, std::string id) {
+		_futures.push_back( 
+			std::async(std::launch::async, &static_sprite_dic::_async_load_image, this, path, id));
 	}
 
 };

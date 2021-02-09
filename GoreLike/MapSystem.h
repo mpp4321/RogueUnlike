@@ -14,6 +14,8 @@ public:
 	void on_position_update(entt::registry & reg, entt::entity ent);
 	const Tile& get_tile(int x, int y);
 	entt::entity create_map_entity(int x, int y);
+	/* create_map_entity based on some abstract "id" will load based on json soon*/
+	entt::entity create_map_entity(int x, int y, std::string id);
 	void set_entity_world_position(int x, int y, const entt::entity& e);
 	void add_to_tile(int x, int y, const entt::entity& e);
 	void remove_from_tile(int x, int y, const entt::entity& e);
