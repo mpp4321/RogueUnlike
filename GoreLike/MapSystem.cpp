@@ -1,32 +1,27 @@
 #include "MapSystem.h"
 
-MapSystem::MapSystem(map_data&& map_component, entt::registry& reg, size_t width, size_t height)
+MapSystem::MapSystem(map_data&& map_component, entt::registry& reg, entt::entity player, size_t width, size_t height, size_t player_x, size_t player_y) : _player_id(player)
 {
-
 	entt::entity map_component_entity = reg.create();
 	//We only call create_map_entity here in the initialization of the map so we are safe to add map_component_entity
 	mc_handle = entt::handle(reg, map_component_entity);
-	
-	//for (int i = 0; i < height; i++) {
-	//	for (int j = 0; j < width; j++) {
-	//		//entt::entity creating = create_map_entity(j, i);
-	//		//auto& ssc = reg.emplace<static_sprite>(creating);
-	//		//ssc.id = "brown_ooze";
-	//		map_component.tiles.push_back(Tile{ std::optional("cobble_blood_3_old"), std::unordered_set<entt::entity> {}, true });
-	//	}
-	//}
 
-	{
-		entt::entity creating = create_map_entity(0, 0);
-		auto& ssc = reg.emplace<static_sprite>(creating);
-		reg.emplace<world_position_controllable>(creating);
-		ssc.id = "angel";
-		map_component.tiles[0].entities.insert(creating);
-	}
+	if(width > 0 && height > 0) 
+		map_component.tiles[ player_y*width + player_x ].entities.insert(_player_id);
 
 	reg.emplace<map_data>(map_component_entity, map_component);
-	
-	mc_handle.registry()->on_update<world_position>().connect<&MapSystem::on_position_update>(this);
+}
+
+
+
+void MapSystem::on_destroy(entt::registry & reg, entt::entity ent)
+{
+	auto& mdata = reg.get<map_data>(ent);
+	for (const auto& elem : mdata.tiles) {
+		for (const auto& ent : elem.entities) {
+			reg.destroy(ent);
+		}
+	}
 }
 
 void MapSystem::render(entt::registry& reg, graphics_context& context, static_sprite_dic& dic) {
@@ -36,12 +31,14 @@ void MapSystem::render(entt::registry& reg, graphics_context& context, static_sp
 	int c = 0;
 	for (auto& tile : mc.tiles) {
 		if (tile.id.has_value()) {
-			SDL_Surface* imgsurf = dic.get_texture(*tile.id);
-			if (!imgsurf) continue;
 			int x = TILE_SIZE * (c % mc.height);
 			int y = TILE_SIZE * (c / mc.height);
-			SDL_Rect&& rect = SDL_Rect{ x, y, imgsurf->w, imgsurf->h };
-			context.draw_image(rect, imgsurf);
+			sprite_render::render(
+				{ tile.id.value() },
+				{ x, y },
+				dic,
+				context
+			);
 		}
 		c++;
 	}
@@ -84,10 +81,11 @@ void MapSystem::update(entt::registry& reg, SDL_Keycode polled_key)
 
 void MapSystem::on_position_update(entt::registry& reg, entt::entity e)
 {
+	auto* mapSystemPtr = reg.ctx<MapSystem*>();
 	auto& c1 = reg.get<world_position>(e);
 	auto& c2 = reg.get<old_world_position>(e);
-	remove_from_tile(c2.x, c2.y, e);
-	add_to_tile(c1.x, c1.y, e);
+	mapSystemPtr->remove_from_tile(c2.x, c2.y, e);
+	mapSystemPtr->add_to_tile(c1.x, c1.y, e);
 	reg.patch<old_world_position>(e, [&c1](auto& owp) {
 		owp.x = c1.x;
 		owp.y = c1.y;
@@ -100,26 +98,43 @@ const Tile& MapSystem::get_tile(int x, int y)
 	return mc.tiles[y * mc.width + x];
 }
 
-entt::entity MapSystem::create_map_entity(int x, int y)
+entt::entity MapSystem::create_map_entity(entt::registry& reg, int x, int y)
 {
-	entt::registry* _reg = mc_handle.registry();
-	entt::entity ent = _reg->create();
-	_reg->emplace<world_position>(ent, x, y);
-	_reg->emplace<old_world_position>(ent, x, y);
-	_reg->emplace<screen_transform>(ent, x*TILE_SIZE, y*TILE_SIZE);
+	entt::entity ent = reg.create();
+	reg.emplace<world_position>(ent, x, y);
+	reg.emplace<old_world_position>(ent, x, y);
+	reg.emplace<screen_transform>(ent, x*TILE_SIZE, y*TILE_SIZE);
 	return ent;
 }
 
-entt::entity MapSystem::create_map_entity(int x, int y, std::string id)
+entt::entity MapSystem::create_map_entity(entt::registry& reg, int x, int y, std::string id)
 {
-	entt::registry* _reg = mc_handle.registry();
-	entt::entity ent = _reg->create();
-	_reg->emplace<world_position>(ent, x, y);
-	_reg->emplace<old_world_position>(ent, x, y);
-	_reg->emplace<screen_transform>(ent, x*TILE_SIZE, y*TILE_SIZE);
-	_reg->emplace<static_sprite>(ent, static_sprite{ id });
-
+	entt::entity ent = reg.create();
+	reg.emplace<world_position>(ent, x, y);
+	reg.emplace<old_world_position>(ent, x, y);
+	reg.emplace<screen_transform>(ent, x*TILE_SIZE, y*TILE_SIZE);
+	reg.emplace<static_sprite>(ent, static_sprite{ id });
 	return ent;
+}
+
+void MapSystem::load_by_map_data(map_data&& map_component, size_t player_x, size_t player_y) {
+	auto& reg = *mc_handle.registry();
+	entt::entity map_component_entity = reg.create();
+	mc_handle.destroy();
+	mc_handle = entt::handle(reg, map_component_entity);
+	auto& width = map_component.width;
+	map_component.tiles[ player_y*width + player_x ].entities.insert(_player_id);
+	reg.emplace<map_data>(map_component_entity, map_component);
+}
+
+void MapSystem::load_static_map_by_id(const std::string& id, size_t player_start_x, size_t player_start_y)
+{
+	auto tmxMap = tmx::Map();
+	auto mapDir = std::filesystem::current_path().append(fmt::format("resources\\maps\\{}.tmx", id)).string();
+	tmxMap.load( mapDir );
+	map_data && mapd = tiled_map_util::initialize_map(tmxMap);
+	size_t w = mapd.width, h = mapd.height;
+	load_by_map_data(std::forward<map_data>(mapd), player_start_x, player_start_y);
 }
 
 void MapSystem::set_entity_world_position(int x, int y, const entt::entity& e)
@@ -181,4 +196,10 @@ bool MapSystem::passable(int x, int y)
 {
 	auto& t = get_tile(x, y);
 	return t.isPassable && t.entities.size() == 0;
+}
+
+void MapSystem::register_events(entt::registry& reg)
+{
+	reg.on_update<world_position>().connect<&MapSystem::on_position_update>();
+	reg.on_destroy<map_data>().connect<&MapSystem::on_destroy>();
 }

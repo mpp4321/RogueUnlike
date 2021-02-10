@@ -1,29 +1,22 @@
-#include "GameStates.h"
-
+#include "GameStates.h" 
 #define INIT_MAP_WIDTH 5
 #define INIT_MAP_HEIGHT 5
 
-TestGameState::TestGameState(entt::registry& reg) /*:*/
-	//map_system(MapSystem(
-	//	map_data{ std::vector<Tile> {}, INIT_MAP_WIDTH, INIT_MAP_HEIGHT },
-	//	reg, INIT_MAP_WIDTH, INIT_MAP_HEIGHT))
+TestGameState::TestGameState(entt::registry& reg) 
 {
-	auto tmxMap = tmx::Map();
-	auto mapDir = std::filesystem::current_path().append("resources\\maps\\map1.tmx").u8string();
-	tmxMap.load(mapDir);
-	map_data && mapd = tiled_map_util::initialize_map(tmxMap);
-	size_t w = mapd.width, h = mapd.height;
-	this->map_system = MapSystem(std::forward<map_data>(mapd), reg, w, h);
+
+	auto player_ent = MapSystem::create_map_entity(reg, 0, 0, "angel");
+	reg.emplace<world_position_controllable>(player_ent);
+
+	this->map_system = MapSystem(map_data{}, reg, player_ent, 0, 0, 0, 0);
+	reg.set<MapSystem*>(&map_system);
+	MapSystem::register_events(reg);
+	map_system.load_static_map_by_id("map1", 0, 0);
+
 	this->_context.initialize_graphics();
 
     auto resource_path = "resources/dcssf/";
-    //auto resource_path = "resources/dcssf/monster";
-    //auto resource_path_tiles = "resources/dcssf/dungeon/floor";
-
     resource_tree_search_and_add(&get_sprite_dict(), std::filesystem::current_path().append(resource_path), true);
-    //resource_tree_search_and_add(&get_sprite_dict(), std::filesystem::current_path().append(resource_path_tiles));
-
-    //get_sprite_dict().print_loaded_textures();
 
 	start(reg);
 }
@@ -67,12 +60,8 @@ void TestGameState::render(registry& reg)
 	map_system.render(reg, _context, _sprite_dict);
 
 	for (auto ent : reg.view<static_sprite, screen_transform>()) {
-		auto& ssc = reg.get<static_sprite>(ent);
-		auto& transform = reg.get<screen_transform>(ent);
-		SDL_Surface* imgsurf = this->_sprite_dict.get_texture(ssc.id);
-		if (!imgsurf) continue;
-		SDL_Rect&& rect = SDL_Rect{ transform.transform_x, transform.transform_y, imgsurf->w, imgsurf->h };
-		_context.draw_image(rect, imgsurf);
+		auto[ssc, transform] = reg.get<static_sprite, screen_transform>(ent);
+		sprite_render::render(ssc, transform, _sprite_dict, _context);
 	}
 	_context.update();
 }

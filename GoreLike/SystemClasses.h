@@ -40,6 +40,7 @@ struct screen_transform {
 //Basically "single sprite Renderable"
 struct static_sprite {
 	std::string id;
+
 };
 
 class static_sprite_dic {
@@ -83,8 +84,8 @@ public:
 	}
 
 	//May return nullptr if texture is not yet loaded.
-	SDL_Surface* get_texture(std::string id) {
-		return texture_map[id];
+	SDL_Surface* const get_texture(std::string id) const {
+		return texture_map.at(id);
 	}
 
 	/* Threadsafe load_texture */
@@ -129,7 +130,7 @@ public:
 
 	void free_resources();
 	void initialize_graphics();
-	void draw_image(SDL_Rect& dest, SDL_Surface* img);
+	void draw_image(SDL_Rect& dest, SDL_Surface* img) const;
 	void update();
 	void clear();
 
@@ -138,3 +139,19 @@ public:
 	}
 };
 
+namespace sprite_render {
+
+	static void render(
+		const static_sprite& ssc,
+		const screen_transform& transform,
+		const static_sprite_dic& dict,
+		const graphics_context& context) {
+
+		SDL_Surface* imgsurf = dict.get_texture(ssc.id);
+		if (!imgsurf) return;
+		SDL_Rect&& rect = SDL_Rect{ transform.transform_x, transform.transform_y, imgsurf->w, imgsurf->h };
+		context.draw_image(rect, imgsurf);
+
+	};
+
+};

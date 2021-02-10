@@ -7,7 +7,6 @@
 #include "FileUtil.h"
 #include "MapComponents.h"
 #include "MapSystem.h"
-#include "tmxlite/Map.hpp"
 
 using namespace entt;
 
@@ -20,6 +19,7 @@ public:
 
 class TestGameState : public GameState {
 private:
+	//Singleton systems to utilize context variables
 	MapSystem map_system;
 
 	graphics_context _context{};

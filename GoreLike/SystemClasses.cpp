@@ -24,7 +24,7 @@ void graphics_context::initialize_graphics() {
 
 }
 
-void graphics_context::draw_image(SDL_Rect& dest, SDL_Surface* img)
+void graphics_context::draw_image(SDL_Rect& dest, SDL_Surface* img) const
 {
 	if (SDL_BlitSurface(img, NULL, windowSurface, &dest) == -1) {
 		printf("Unsuccessful blit\n");
