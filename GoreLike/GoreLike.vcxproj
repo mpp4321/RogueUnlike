@@ -149,6 +149,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="entity_ai.cpp" />
+    <ClCompile Include="entity_ai_system.cpp" />
+    <ClCompile Include="entity_stats.cpp" />
     <ClCompile Include="FileUtil.cpp" />
     <ClCompile Include="GameStates.cpp" />
     <ClCompile Include="GoreLike.cpp" />
@@ -159,6 +162,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\Documents\Entt Include File\entt.hpp" />
+    <ClInclude Include="entity_ai.h" />
+    <ClInclude Include="entity_ai_system.h" />
+    <ClInclude Include="entity_stats.h" />
     <ClInclude Include="FileUtil.h" />
     <ClInclude Include="GameStates.h" />
     <ClInclude Include="MapComponents.h" />

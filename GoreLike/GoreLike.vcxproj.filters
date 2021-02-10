@@ -19,6 +19,12 @@
     <Filter Include="Header Files\main">
       <UniqueIdentifier>{51656f14-26c2-4225-98dc-efc8d7abb681}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\main\entity">
+      <UniqueIdentifier>{9de9a810-0ada-494b-a5ac-2222d5a4eb6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\main\entity">
+      <UniqueIdentifier>{1c66ba6b-92ba-4b84-9ce2-bfd2c6c9e1e4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FileUtil.cpp">
@@ -41,6 +47,15 @@
     </ClCompile>
     <ClCompile Include="MapComponents.cpp">
       <Filter>Source Files\main</Filter>
+    </ClCompile>
+    <ClCompile Include="entity_stats.cpp">
+      <Filter>Source Files\main\entity</Filter>
+    </ClCompile>
+    <ClCompile Include="entity_ai.cpp">
+      <Filter>Source Files\main\entity</Filter>
+    </ClCompile>
+    <ClCompile Include="entity_ai_system.cpp">
+      <Filter>Source Files\main\entity</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -67,6 +82,15 @@
     </ClInclude>
     <ClInclude Include="MapComponents.h">
       <Filter>Header Files\main</Filter>
+    </ClInclude>
+    <ClInclude Include="entity_stats.h">
+      <Filter>Header Files\main\entity</Filter>
+    </ClInclude>
+    <ClInclude Include="entity_ai.h">
+      <Filter>Header Files\main\entity</Filter>
+    </ClInclude>
+    <ClInclude Include="entity_ai_system.h">
+      <Filter>Header Files\main\entity</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

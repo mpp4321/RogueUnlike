@@ -50,7 +50,6 @@ private:
 		static std::mutex mu_texture;
 		//SDL_Surface* loaded_texture = IMG_Load(path.c_str());
 		SDL_Surface* loaded_texture = IMG_Load(path.c_str());
-		printf("Loaded an image\n");
 		std::lock_guard<std::mutex> load_lock(mu_texture);
 		if (loaded_texture) {
 			texture_map[id] = loaded_texture;
