@@ -6,6 +6,7 @@
 #include "tiled_map_util.h"
 #include "FileUtil.h"
 #include "MapComponents.h"
+#include "entity_json_utils.h"
 #include "MapSystem.h"
 
 using namespace entt;

@@ -17,6 +17,7 @@ TestGameState::TestGameState(entt::registry& reg)
 
     auto resource_path = "resources/dcssf/";
     resource_tree_search_and_add(&get_sprite_dict(), std::filesystem::current_path().append(resource_path), true);
+    entity_json_utils::initialize_entity(reg, std::filesystem::current_path().append("resources/json_entities/test.json").string());
 
 	start(reg);
 }

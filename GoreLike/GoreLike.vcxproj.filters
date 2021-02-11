@@ -57,6 +57,9 @@
     <ClCompile Include="entity_ai_system.cpp">
       <Filter>Source Files\main\entity</Filter>
     </ClCompile>
+    <ClCompile Include="entity_json_utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\Documents\Entt Include File\entt.hpp">
@@ -91,6 +94,9 @@
     </ClInclude>
     <ClInclude Include="entity_ai_system.h">
       <Filter>Header Files\main\entity</Filter>
+    </ClInclude>
+    <ClInclude Include="entity_json_utils.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

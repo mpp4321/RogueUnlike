@@ -11,6 +11,7 @@
 #include "SDL_image.h"
 #include "entt.hpp"
 #include <future>
+#include "json.hpp"
 
 struct world_position_controllable {};
 
@@ -21,14 +22,15 @@ struct bump_event {
 };
 
 struct old_world_position {
-	old_world_position(size_t _x, size_t _y) : x(_x), y(_y) {};
-    size_t x, y;
+	old_world_position(unsigned int _x, unsigned int _y) : x(_x), y(_y) {};
+    unsigned int x, y;
 };
 
 struct world_position {
-	world_position(size_t _x, size_t _y) : x(_x), y(_y) {};
-    size_t x, y;
+    unsigned int x = 0, y = 0;
+	NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(world_position, x, y)
 };
+
 
 //Flag to render a worldcomponent
 struct world_render {};

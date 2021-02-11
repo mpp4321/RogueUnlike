@@ -1,6 +1,6 @@
 #include "MapSystem.h"
 
-MapSystem::MapSystem(map_data&& map_component, entt::registry& reg, entt::entity player, size_t width, size_t height, size_t player_x, size_t player_y) : _player_id(player)
+MapSystem::MapSystem(map_data&& map_component, entt::registry& reg, entt::entity player, unsigned int width, unsigned int height, unsigned int player_x, unsigned int player_y) : _player_id(player)
 {
 	entt::entity map_component_entity = reg.create();
 	//We only call create_map_entity here in the initialization of the map so we are safe to add map_component_entity
@@ -92,32 +92,29 @@ void MapSystem::on_position_update(entt::registry& reg, entt::entity e)
 	});
 }
 
-const Tile& MapSystem::get_tile(int x, int y)
+const Tile& MapSystem::get_tile(unsigned int x, unsigned int y)
 {
 	auto& mc = mc_handle.get<map_data>();
 	return mc.tiles[y * mc.width + x];
 }
 
-entt::entity MapSystem::create_map_entity(entt::registry& reg, int x, int y)
+entt::entity MapSystem::create_map_entity(entt::registry& reg, unsigned int x, unsigned int y)
 {
 	entt::entity ent = reg.create();
-	reg.emplace<world_position>(ent, x, y);
+	reg.emplace<world_position>(ent, world_position { x, y });
 	reg.emplace<old_world_position>(ent, x, y);
-	reg.emplace<screen_transform>(ent, x*TILE_SIZE, y*TILE_SIZE);
+	reg.emplace<screen_transform>(ent, screen_transform{ static_cast<int>(x) * TILE_SIZE, static_cast<int>(y) * TILE_SIZE });
 	return ent;
 }
 
-entt::entity MapSystem::create_map_entity(entt::registry& reg, int x, int y, std::string id)
+entt::entity MapSystem::create_map_entity(entt::registry& reg, unsigned int x, unsigned int y, std::string id)
 {
-	entt::entity ent = reg.create();
-	reg.emplace<world_position>(ent, x, y);
-	reg.emplace<old_world_position>(ent, x, y);
-	reg.emplace<screen_transform>(ent, x*TILE_SIZE, y*TILE_SIZE);
+	auto ent = create_map_entity(reg, x, y);
 	reg.emplace<static_sprite>(ent, static_sprite{ id });
 	return ent;
 }
 
-void MapSystem::load_by_map_data(map_data&& map_component, size_t player_x, size_t player_y) {
+void MapSystem::load_by_map_data(map_data&& map_component, unsigned int player_x, unsigned int player_y) {
 	auto& reg = *mc_handle.registry();
 	entt::entity map_component_entity = reg.create();
 	mc_handle.destroy();
@@ -127,17 +124,17 @@ void MapSystem::load_by_map_data(map_data&& map_component, size_t player_x, size
 	reg.emplace<map_data>(map_component_entity, map_component);
 }
 
-void MapSystem::load_static_map_by_id(const std::string& id, size_t player_start_x, size_t player_start_y)
+void MapSystem::load_static_map_by_id(const std::string& id, unsigned int player_start_x, unsigned int player_start_y)
 {
 	auto tmxMap = tmx::Map();
 	auto mapDir = std::filesystem::current_path().append(fmt::format("resources\\maps\\{}.tmx", id)).string();
 	tmxMap.load( mapDir );
 	map_data && mapd = tiled_map_util::initialize_map(tmxMap);
-	size_t w = mapd.width, h = mapd.height;
+	unsigned int w = mapd.width, h = mapd.height;
 	load_by_map_data(std::forward<map_data>(mapd), player_start_x, player_start_y);
 }
 
-void MapSystem::set_entity_world_position(int x, int y, const entt::entity& e)
+void MapSystem::set_entity_world_position(unsigned int x, unsigned int y, const entt::entity& e)
 {
 	entt::registry* _reg = mc_handle.registry();
 	auto& worldPos = _reg->get<world_position>(e);
@@ -155,7 +152,7 @@ void MapSystem::set_entity_world_position(int x, int y, const entt::entity& e)
 	}
 }
 
-void MapSystem::add_to_tile(int x, int y, const entt::entity& e)
+void MapSystem::add_to_tile(unsigned int x, unsigned int y, const entt::entity& e)
 {
 	if (!is_entity(x, y, e)) {
 		mc_handle.patch<map_data>([&x, &y, &e](auto& mc) {
@@ -167,7 +164,7 @@ void MapSystem::add_to_tile(int x, int y, const entt::entity& e)
 	}
 }
 
-void MapSystem::remove_from_tile(int x, int y, const entt::entity& e)
+void MapSystem::remove_from_tile(unsigned int x, unsigned int y, const entt::entity& e)
 {
 	if (is_entity(x, y, e)) {
 		mc_handle.patch<map_data>([&x, &y, &e](auto& mc) {
@@ -179,7 +176,7 @@ void MapSystem::remove_from_tile(int x, int y, const entt::entity& e)
 	}
 }
 
-bool MapSystem::is_entity(int x, int y, const entt::entity& ent)
+bool MapSystem::is_entity(unsigned int x, unsigned int y, const entt::entity& ent)
 {
 	auto& mc = mc_handle.get<map_data>();
 	auto& tile = mc.tiles[y * mc.width + x];
@@ -192,7 +189,7 @@ bool MapSystem::in_range(int x, int y)
 	return x >= 0 && y >= 0 && x < wc.width && y < wc.height;
 }
 
-bool MapSystem::passable(int x, int y)
+bool MapSystem::passable(unsigned int x, unsigned int y)
 {
 	auto& t = get_tile(x, y);
 	return t.isPassable && t.entities.size() == 0;
