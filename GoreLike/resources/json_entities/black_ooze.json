@@ -1,0 +1,10 @@
+{
+	"base": "world_base",
+	"data": 
+    [
+      {
+        "type": "static_sprite",
+        "object": { "id": "death_ooze_new" }
+      }
+    ]
+}

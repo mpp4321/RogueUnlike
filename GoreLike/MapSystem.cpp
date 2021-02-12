@@ -138,8 +138,6 @@ void MapSystem::set_entity_world_position(unsigned int x, unsigned int y, const 
 {
 	entt::registry* _reg = mc_handle.registry();
 	auto& worldPos = _reg->get<world_position>(e);
-	remove_from_tile(worldPos.x, worldPos.y, e);
-	add_to_tile(x, y, e);
 	_reg->patch<world_position>(e, [&x, &y](auto& wpc) {
 		wpc.x = x;
 		wpc.y = y;
@@ -156,7 +154,7 @@ void MapSystem::add_to_tile(unsigned int x, unsigned int y, const entt::entity& 
 {
 	if (!is_entity(x, y, e)) {
 		mc_handle.patch<map_data>([&x, &y, &e](auto& mc) {
-		mc.tiles[y * mc.width + x].entities.insert(e);
+			mc.tiles[y * mc.width + x].entities.insert(e);
 		});
 	}
 	else {

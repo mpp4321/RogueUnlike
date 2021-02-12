@@ -1,0 +1,16 @@
+{
+	"data": [
+    {
+      "type": "world_position",
+      "object":  {}
+    },
+    {
+      "type": "old_world_position",
+      "object":  {}
+    },
+    {
+      "type": "screen_transform",
+      "object":  {}
+    }
+  ]
+}

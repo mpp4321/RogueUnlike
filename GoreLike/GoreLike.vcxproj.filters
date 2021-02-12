@@ -60,6 +60,9 @@
     <ClCompile Include="entity_json_utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="text_history_component.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\Documents\Entt Include File\entt.hpp">
@@ -96,6 +99,9 @@
       <Filter>Header Files\main\entity</Filter>
     </ClInclude>
     <ClInclude Include="entity_json_utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="text_history_component.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

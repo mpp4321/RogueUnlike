@@ -18,7 +18,9 @@ class JsonFactory {
 public:
 	static void initialize(json j, registry& reg, entity ent) {
 		T u{};
-		u.from_json(j, u);
+		if (!j.empty()) {
+			u.from_json(j, u);
+		}
 		reg.emplace<T>(ent, u);
 	}
 };
@@ -31,9 +33,16 @@ class entity_json_utils
 {
 
 public:
-	static entity initialize_entity(registry& reg, const std::string& jpath) {
+	static entity initialize_entity(registry& reg, const std::string& jpath, entity rec_ent=entt::null) {
 		std::string fileContents = get_file_contents(jpath);
 		json j = json::parse(fileContents);
+
+		entity x = rec_ent == entt::null ? reg.create() : rec_ent;
+
+		if (j.count("base")) {
+			initialize_entity(reg, get_resource_dir().append("/resources/json_entities/").append(j["base"].get<std::string>()).append(".json"), x);
+		}
+
 		/*
 		
 		[
@@ -42,11 +51,10 @@ public:
 			"object": {some object data}
 			},
 		] 
-		
+	
 		*/
-		entity x = reg.create();
 
-		for (json inner : j) {
+		for (json inner : j["data"]) {
 			get_type_map()[inner["type"].get<std::string>()]( inner["object"], reg, x );
 		}
 		return x;
@@ -68,6 +76,9 @@ private:
 			//Initialize here
 			#define S(key, type) struct_type_map.insert_or_assign(key, delegate<void(json, registry&, entity)> { entt::connect_arg<&JsonFactory<type>::initialize> });
 			S("world_position", world_position);
+			S("old_world_position", old_world_position);
+			S("screen_transform", screen_transform);
+			S("static_sprite", static_sprite);
 
 			return struct_type_map;
 		}

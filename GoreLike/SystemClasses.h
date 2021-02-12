@@ -15,6 +15,8 @@
 
 struct world_position_controllable {};
 
+//TODO make this json compatible
+// Simply make different "components" for different bump events like bump_event_enemy, bump_event_npc etc
 struct bump_event {
 	//Function which is called when an entity bumps into owning entity
 	//Params are entity which bumped this one
@@ -22,8 +24,8 @@ struct bump_event {
 };
 
 struct old_world_position {
-	old_world_position(unsigned int _x, unsigned int _y) : x(_x), y(_y) {};
-    unsigned int x, y;
+    unsigned int x = 0, y = 0;
+	NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(old_world_position, x, y)
 };
 
 struct world_position {
@@ -37,12 +39,13 @@ struct world_render {};
 
 struct screen_transform {
 	int transform_x, transform_y;
+	NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(screen_transform, transform_x, transform_y)
 };
 
 //Basically "single sprite Renderable"
 struct static_sprite {
-	std::string id;
-
+	std::string id = "brown_ooze";
+	NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(static_sprite, id)
 };
 
 class static_sprite_dic {

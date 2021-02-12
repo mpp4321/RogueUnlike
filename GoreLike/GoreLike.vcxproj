@@ -159,6 +159,7 @@
     <ClCompile Include="MapComponents.cpp" />
     <ClCompile Include="MapSystem.cpp" />
     <ClCompile Include="SystemClasses.cpp" />
+    <ClCompile Include="text_history_component.cpp" />
     <ClCompile Include="tiled_map_util.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -173,6 +174,7 @@
     <ClInclude Include="MapSystem.h" />
     <ClInclude Include="RandomUtil.h" />
     <ClInclude Include="SystemClasses.h" />
+    <ClInclude Include="text_history_component.h" />
     <ClInclude Include="tiled_map_util.h" />
   </ItemGroup>
   <ItemGroup>
