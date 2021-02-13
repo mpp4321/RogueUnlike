@@ -6,10 +6,10 @@
 			"object": {
 				"sprite_sequence": [
 					{
-						"id": "death_ooze_new"
+						"id": "reaper_new"
 					},
 					{
-						"id": "death_ooze_old"
+						"id": "reaper_old"
 					}
 				]
 			}

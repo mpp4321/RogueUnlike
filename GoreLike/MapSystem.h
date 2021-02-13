@@ -27,6 +27,7 @@ public:
 	void load_by_map_data(map_data&& map_component, unsigned int player_x, unsigned int player_y);
 	void load_static_map_by_id(const std::string& id, unsigned int player_start_x, unsigned int player_start_y);
 	void set_entity_world_position(unsigned int x, unsigned int y, const entt::entity& e);
+	static void outside_no_update_set_entity_world_position(entt::registry& reg, unsigned int x, unsigned int y, const entt::entity& e);
 	void add_to_tile(unsigned int x, unsigned int y, const entt::entity& e);
 	void remove_from_tile(unsigned int x, unsigned int y, const entt::entity& e);
 	void render(entt::registry& reg, graphics_context& context, static_sprite_dic& dic);

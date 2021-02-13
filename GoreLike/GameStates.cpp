@@ -18,7 +18,7 @@ TestGameState::TestGameState(entt::registry& reg)
     auto resource_path = "resources/dcssf/";
     resource_tree_search_and_add(&get_sprite_dict(), std::filesystem::current_path().append(resource_path), true);
 
-    auto ent = entity_json_utils::initialize_entity(reg, std::filesystem::current_path().append("resources/json_entities/black_ooze.json").string());
+    auto ent = entity_json_utils::initialize_entity(reg, "black_ooze");
 
 	map_system.set_entity_world_position(2, 2, ent);
 	
@@ -52,8 +52,35 @@ void TestGameState::start(registry& reg)
 				update(reg, 0.0f);
 			}
 		}
+
+		time_last = time_now;
+		time_now = SDL_GetPerformanceCounter();
+		float dt = (float)((time_now - time_last) * 1000.0f / (float)SDL_GetPerformanceFrequency());
+		tick(reg, dt);
+
 		render(reg);
 	}
+}
+
+void TestGameState::tick(registry& reg, float dt) {
+	
+	auto anim_sprite_view = reg.view<timed, animated_sprite>();
+
+	for (entt::entity ent : anim_sprite_view) {
+
+		bool anim_sprite = false;
+		reg.patch<timed>(ent, [&](auto& timer) {
+			if (timer.increment_time(animated_sprite::id, dt)) {
+				reg.patch<animated_sprite>(ent, [](auto& x) { x.next(); });
+				const animated_sprite& a_sprite_ref = reg.get<animated_sprite>(ent);
+				reg.emplace_or_replace<static_sprite>(ent, a_sprite_ref.get_cur());
+			}
+		});
+		
+		auto timz = reg.get<timed>(ent);
+
+	}
+
 }
 
 void TestGameState::render(registry& reg)

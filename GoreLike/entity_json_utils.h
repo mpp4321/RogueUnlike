@@ -19,7 +19,7 @@ public:
 	static void initialize(json j, registry& reg, entity ent) {
 		T u{};
 		if (!j.empty()) {
-			u.from_json(j, u);
+			from_json(j, u);
 		}
 		reg.emplace<T>(ent, u);
 	}
@@ -34,24 +34,27 @@ class entity_json_utils
 
 public:
 	static entity initialize_entity(registry& reg, const std::string& jpath, entity rec_ent=entt::null) {
-		std::string fileContents = get_file_contents(jpath);
+		std::string fileContents = get_file_contents(
+			std::filesystem::current_path().append("resources/json_entities/").string().append(jpath).append(".json")
+		);
 		json j = json::parse(fileContents);
 
 		entity x = rec_ent == entt::null ? reg.create() : rec_ent;
 
 		if (j.count("base")) {
-			initialize_entity(reg, get_resource_dir().append("/resources/json_entities/").append(j["base"].get<std::string>()).append(".json"), x);
+			initialize_entity(reg, j["base"].get<std::string>(), x);
 		}
 
 		/*
-		
-		[
-			{
-			"type": "typeName",
-			"object": {some object data}
-			},
-		] 
-	
+		{
+			"base": "some base name field optional",
+			"data": [
+				{
+				"type": "typeName",
+				"object": {some object data}
+				},
+			]
+		}
 		*/
 
 		for (json inner : j["data"]) {
@@ -79,6 +82,8 @@ private:
 			S("old_world_position", old_world_position);
 			S("screen_transform", screen_transform);
 			S("static_sprite", static_sprite);
+			S("animated_sprite", animated_sprite);
+			S("timed", timed);
 
 			return struct_type_map;
 		}

@@ -129,7 +129,7 @@ void MapSystem::load_static_map_by_id(const std::string& id, unsigned int player
 	auto tmxMap = tmx::Map();
 	auto mapDir = std::filesystem::current_path().append(fmt::format("resources\\maps\\{}.tmx", id)).string();
 	tmxMap.load( mapDir );
-	map_data && mapd = tiled_map_util::initialize_map(tmxMap);
+	map_data && mapd = tiled_map_util::initialize_map(*mc_handle.registry(), tmxMap);
 	unsigned int w = mapd.width, h = mapd.height;
 	load_by_map_data(std::forward<map_data>(mapd), player_start_x, player_start_y);
 }
@@ -144,6 +144,19 @@ void MapSystem::set_entity_world_position(unsigned int x, unsigned int y, const 
 	});
 	if (_reg->has<screen_transform>(e)) {
 		_reg->patch<screen_transform>(e, [&x, &y](auto& st) {
+			st.transform_x = TILE_SIZE * x;
+			st.transform_y = TILE_SIZE * y;
+		});
+	}
+}
+
+void MapSystem::outside_no_update_set_entity_world_position(entt::registry& reg, unsigned int x, unsigned int y, const entt::entity& e)
+{
+	world_position& worldPos = reg.get<world_position>(e);
+	worldPos.x = x;
+	worldPos.y = y;
+	if (reg.has<screen_transform>(e)) {
+		reg.patch<screen_transform>(e, [&x, &y](auto& st) {
 			st.transform_x = TILE_SIZE * x;
 			st.transform_y = TILE_SIZE * y;
 		});

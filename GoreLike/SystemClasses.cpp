@@ -1,5 +1,7 @@
 #include "SystemClasses.h"
 
+std::mutex static_sprite_dic::mu_texture{};
+
 void graphics_context::free_resources() {
 	SDL_FreeSurface(windowSurface);
 	//SDL_DestroyWindow(window);
@@ -40,3 +42,7 @@ void graphics_context::clear()
 {
 	SDL_FillRect(windowSurface, NULL, SDL_MapRGB(windowSurface->format, 0, 0, 0));
 }
+
+using id = std::string;
+
+id animated_sprite::id = "animated_sprite";
