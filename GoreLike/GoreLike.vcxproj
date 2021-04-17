@@ -123,13 +123,13 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)..\tmxlite\tmxlite\include;$(ProjectDir)includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
       <DisableSpecificWarnings>4996</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>fmtd.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>fmtd.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -169,7 +169,10 @@
     <ClInclude Include="entity_json_utils.h" />
     <ClInclude Include="entity_stats.h" />
     <ClInclude Include="FileUtil.h" />
+    <ClInclude Include="func_helper.hpp" />
     <ClInclude Include="GameStates.h" />
+    <ClInclude Include="GUISystem.h" />
+    <ClInclude Include="gui_help.hpp" />
     <ClInclude Include="MapComponents.h" />
     <ClInclude Include="MapSystem.h" />
     <ClInclude Include="RandomUtil.h" />

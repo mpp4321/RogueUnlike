@@ -4,6 +4,7 @@
 #define SCREEN_HEIGHT 608
 
 #include "RandomUtil.h"
+#include "SDL_ttf.h"
 #include <iostream>
 #include <string>
 #include <unordered_map>
@@ -13,10 +14,12 @@
 #include <future>
 #include "json.hpp"
 
+using EH_DELEGATE_TYPE = entt::delegate<void(entt::handle)>;
+
 struct world_position_controllable {};
 
 //TODO make this json compatible
-// Simply make different "components" for different bump events like bump_event_enemy, bump_event_npc etc
+// Simply make different "json components" for different bump events like bump_event_enemy, bump_event_npc etc
 struct bump_event {
 	//Function which is called when an entity bumps into owning entity
 	//Params are entity which bumped this one
@@ -29,27 +32,55 @@ struct __time_data {
 };
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(__time_data, maxTime)
 
+using Timer_Callback = entt::delegate<void(entt::handle, int)>;
+
+struct game_timed {
+	std::unordered_map<std::string, __time_data> times{};
+	//void(int) int is amount of times to run functionality
+	std::unordered_map < std::string, Timer_Callback > call_backs{};
+
+	void increment_time(entt::handle h, float owner_spd, float player_spd) {
+		for (auto&[id, timeData] : times) {
+			auto& [curTime, maxTime] = timeData;
+			float inc_time = owner_spd / player_spd;
+			curTime -= inc_time;
+			if (curTime < 0.001f) {
+				int moves = static_cast<int>((-1+curTime) * -1);
+				curTime += maxTime;
+				if (call_backs.count(id)) {
+					call_backs[id](h, moves);
+				}
+			}
+		}
+	}
+
+	void init_call_backs();
+};
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(game_timed, times)
+
 struct timed {
 	using identifier = std::string;
 	std::unordered_map<identifier, __time_data> times{};
+	std::unordered_map < std::string, Timer_Callback > call_backs{};
 
 	void initialize_time(identifier id, float maxTime) {
 		times[id] = { maxTime, maxTime };
 	}
 
-	bool increment_time(identifier id, float dt) {
-		if (times.count(id)) {
-			auto& [curTime, maxTime] = times[id];
+	void increment_time(entt::handle h, float dt) {
+		for (auto&[id, timeData] : times) {
+			auto& [curTime, maxTime] = timeData;
 			curTime -= dt;
 			if (curTime < 0.001f) {
 				curTime = maxTime;
-				return true;
+				if (call_backs.count(id)) {
+					call_backs[id](h, 1);
+				}
 			}
-			return false;
 		}
-		return false;
 	}
 
+	void init_call_backs();
 };
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(timed, times)
 
@@ -63,14 +94,63 @@ struct world_position {
 };
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(world_position, x, y)
 
+struct stat_block {
+	int life = 0;
+	int mana = 0;
+
+	//Strength, muscle mass power etc
+	int str = 0;
+	
+	//Perception, self explanitory
+	int perc = 0;
+
+	//Dexterity, cunningness nimbleness etc
+	int dex = 0;
+
+	//Constitution, physical fortitutde
+	int con = 0;
+
+	//Willpower, mental fortitude
+	int wil = 0;
+
+	//Magic, magical power
+	int magic = 0;
+
+	stat_block operator+(const stat_block& b) {
+		return stat_block {
+			life + b.life,
+			mana + b.mana,
+			str + b.str,
+			perc + b.perc,
+			dex + b.dex,
+			con + b.con,
+			wil + b.wil,
+			magic + b.magic
+		};
+	}
+};
+NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(stat_block, life, mana, str, perc, dex, con, wil, magic)
+
+struct entity_main_stat {
+
+	//Key is identifier for debuff/buff so as not to reapply, for example one key might be equipment or slowness
+	std::unordered_map < std::string, std::weak_ptr<stat_block> > main_stat_mods{};
+	stat_block main_block;
+
+};
 
 //Flag to render a worldcomponent
+
 struct world_render {};
 
 struct screen_transform {
 	int transform_x, transform_y;
 };
 NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(screen_transform, transform_x, transform_y)
+
+struct rectangle_bound {
+	size_t width, height;
+};
 
 //Basically "single sprite Renderable"
 struct static_sprite {
@@ -80,6 +160,7 @@ NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(static_sprite, id)
 
 struct animated_sprite {
 	static std::string id; /* defined in cpp */
+	static Timer_Callback _timer_Callback;
 
 	size_t c_sprite_pos = 0;
 	std::vector<static_sprite> sprite_sequence{};
@@ -192,7 +273,7 @@ public:
 
 	void free_resources();
 	void initialize_graphics();
-	void draw_image(SDL_Rect& dest, SDL_Surface* img) const;
+	void draw_image(SDL_Rect&& dest, SDL_Surface* img) const;
 	void update();
 	void clear();
 
@@ -212,8 +293,44 @@ namespace sprite_render {
 		SDL_Surface* imgsurf = dict.get_texture(ssc.id);
 		if (!imgsurf) return;
 		SDL_Rect&& rect = SDL_Rect{ transform.transform_x, transform.transform_y, imgsurf->w, imgsurf->h };
-		context.draw_image(rect, imgsurf);
+		context.draw_image(std::forward<SDL_Rect>(rect), imgsurf);
 
 	};
 
 };
+
+//Child components for a gui component
+struct gui_text {
+	
+	std::string text_line = "";
+	SDL_Color color = { 255, 255, 255 };
+	SDL_Surface* message = NULL;
+
+};
+
+	//GUISystem manages component types which are "buttons"
+	//Buttons hold delegates to the callback on a click
+	//They also contain a child component transform and size
+
+//Component for button
+struct button {
+	//Delegate takes std::any for data
+	EH_DELEGATE_TYPE callback;
+};
+
+
+//Parent gui component
+struct options_menu_gui {
+	std::vector<entt::entity> gui_text_components{};
+	std::unordered_map< SDL_Keycode, EH_DELEGATE_TYPE > call_backs{};
+	int8_t priority = 0;
+};
+
+
+//c_ stands for core
+struct c_input_event {
+	SDL_Keycode code;
+	bool mouse_clicked = false;
+	std::pair<int, int> mouse_info;
+};
+

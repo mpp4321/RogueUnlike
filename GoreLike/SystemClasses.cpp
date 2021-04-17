@@ -19,6 +19,11 @@ void graphics_context::initialize_graphics() {
 		{
 			printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
 		}
+
+		if (TTF_Init() == -1) {
+			printf("Cannot load TTF lib SDL_ERROR: %s\n", SDL_GetError());
+		}
+
 		else {
 			windowSurface = SDL_GetWindowSurface(window);
 		}
@@ -26,7 +31,7 @@ void graphics_context::initialize_graphics() {
 
 }
 
-void graphics_context::draw_image(SDL_Rect& dest, SDL_Surface* img) const
+void graphics_context::draw_image(SDL_Rect&& dest, SDL_Surface* img) const
 {
 	if (SDL_BlitSurface(img, NULL, windowSurface, &dest) == -1) {
 		printf("Unsuccessful blit\n");
@@ -46,3 +51,26 @@ void graphics_context::clear()
 using id = std::string;
 
 id animated_sprite::id = "animated_sprite";
+Timer_Callback animated_sprite::_timer_Callback = Timer_Callback { [](const void* ptr, entt::handle h, int times) {
+	h.patch<animated_sprite>([](auto& c) { c.next(); });
+	const auto& a_sprite_ref = h.get<animated_sprite>();
+	h.emplace_or_replace<static_sprite>(a_sprite_ref.get_cur());
+} };
+
+void game_timed::init_call_backs() {
+	for (auto pair : times) {
+		if (pair.first == animated_sprite::id) {
+			//Animated_sprite
+			call_backs[animated_sprite::id] = (animated_sprite::_timer_Callback);
+		}
+	}
+}
+
+void timed::init_call_backs() {
+	for (auto pair : times) {
+		if (pair.first == animated_sprite::id) {
+			//Animated_sprite
+			call_backs[animated_sprite::id] = (animated_sprite::_timer_Callback);
+		}
+	}
+}

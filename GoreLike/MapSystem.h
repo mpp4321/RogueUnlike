@@ -30,8 +30,10 @@ public:
 	static void outside_no_update_set_entity_world_position(entt::registry& reg, unsigned int x, unsigned int y, const entt::entity& e);
 	void add_to_tile(unsigned int x, unsigned int y, const entt::entity& e);
 	void remove_from_tile(unsigned int x, unsigned int y, const entt::entity& e);
+
 	void render(entt::registry& reg, graphics_context& context, static_sprite_dic& dic);
 	void update(entt::registry& reg, SDL_Keycode);
+
 	bool is_entity(unsigned int x, unsigned int y, const entt::entity& ent);
 	bool in_range(int x, int y);
 	bool passable(unsigned int x, unsigned int y);

@@ -104,5 +104,14 @@
     <ClInclude Include="text_history_component.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GUISystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gui_help.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="func_helper.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

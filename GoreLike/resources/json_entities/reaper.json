@@ -6,20 +6,20 @@
 			"object": {
 				"sprite_sequence": [
 					{
-						"id": "reaper_new"
+						"id": "sun_demon"
 					},
 					{
-						"id": "reaper_old"
+						"id": "rotting_devil"
 					}
 				]
 			}
 		},
 		{
-			"type": "timed",
+			"type": "game_timed",
 			"object": {
 				"times": {
 					"animated_sprite": {
-						"maxTime": 1000.0
+						"maxTime": 1.0
 					}
 				}
 			}

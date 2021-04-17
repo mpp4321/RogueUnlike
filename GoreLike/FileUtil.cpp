@@ -22,7 +22,7 @@ void resource_tree_search_and_add(static_sprite_dic* dict, const std::filesystem
 
 std::string get_stem(const std::string& str)
 {
-	return std::filesystem::path(str).stem().u8string();
+	return std::filesystem::path(str).stem().string();
 }
 
 std::string get_file_contents(const std::string& path)
@@ -33,6 +33,6 @@ std::string get_file_contents(const std::string& path)
 
 std::string get_resource_dir()
 {
-	return std::filesystem::current_path().u8string();
+	return std::filesystem::current_path().string().append("\\resources\\");
 }
 

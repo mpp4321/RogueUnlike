@@ -12,8 +12,6 @@ MapSystem::MapSystem(map_data&& map_component, entt::registry& reg, entt::entity
 	reg.emplace<map_data>(map_component_entity, map_component);
 }
 
-
-
 void MapSystem::on_destroy(entt::registry & reg, entt::entity ent)
 {
 	auto& mdata = reg.get<map_data>(ent);

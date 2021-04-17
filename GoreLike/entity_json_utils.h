@@ -17,7 +17,7 @@ template< class T >
 class JsonFactory {
 public:
 	static void initialize(json j, registry& reg, entity ent) {
-		T u{};
+		T u {};
 		if (!j.empty()) {
 			from_json(j, u);
 		}
@@ -84,6 +84,7 @@ private:
 			S("static_sprite", static_sprite);
 			S("animated_sprite", animated_sprite);
 			S("timed", timed);
+			S("game_timed", game_timed);
 
 			return struct_type_map;
 		}
