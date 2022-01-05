@@ -58,19 +58,26 @@ static_sprite_dic& TestGameState::get_sprite_dict()
 	return _sprite_dict;
 }
 
+Uint64 TestGameState::calculate_and_update_dt() 
+{
+	time_last = time_now;
+	time_now = SDL_GetPerformanceCounter();
+	return (float)((time_now - time_last) * 1000.0f / (float)SDL_GetPerformanceFrequency());
+}
+
 void TestGameState::start(registry& reg)
 {
 	SDL_Event e;
 	while (!quit) {
 		polled_key = SDLK_INSERT;
 		SDL_GetMouseState(&mouse_loc.first, &mouse_loc.second);
+
+		// Only tick time if we poll an event
 		while (SDL_PollEvent(&e) != 0) {
 			update(reg, &e);
 		}
 
-		time_last = time_now;
-		time_now = SDL_GetPerformanceCounter();
-		float dt = (float)((time_now - time_last) * 1000.0f / (float)SDL_GetPerformanceFrequency());
+		float dt = calculate_and_update_dt();
 		tick(reg, dt);
 
 		render(reg);
@@ -138,8 +145,4 @@ void TestGameState::update(registry& reg, SDL_Event* ev)
 	else if (ev->type == SDL_MOUSEBUTTONDOWN) {
 		gui_system.update(reg, c_input_event{polled_key, ev->type == SDL_MOUSEBUTTONDOWN, mouse_loc});
 	}
-
-	
-
-
 }

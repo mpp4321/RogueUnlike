@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SDL.h"
+#include "SDL2/SDL.h"
 #include "entt.hpp"
 #include "SystemClasses.h"
 #include "tiled_map_util.h"
@@ -36,6 +36,8 @@ private:
 	Uint64 time_last = 0;
 
 	bool quit = false;
+	
+	Uint64 calculate_and_update_dt();
 public:
 	TestGameState(entt::registry& reg);
 	~TestGameState();

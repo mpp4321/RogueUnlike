@@ -39,7 +39,7 @@ public:
 			std::cout << "Initialized SDL_TTF Successfully " << std::endl;
 		}
 
-		auto s = get_resource_dir().append("fonts\\ksink.ttf");
+		auto s = (get_resource_dir() / ("fonts/ksink.ttf")).string();
 		font = TTF_OpenFont(s.c_str(), 8);
 
 		if (!font) {

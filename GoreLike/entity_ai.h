@@ -1,4 +1,5 @@
 #pragma once
+#include <cstddef>
 
 struct ai_wander {
 	size_t distance = 2147000000;

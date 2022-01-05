@@ -31,8 +31,9 @@ std::string get_file_contents(const std::string& path)
 	return { std::istreambuf_iterator<char>(k), std::istreambuf_iterator<char>() };
 }
 
-std::string get_resource_dir()
+std::filesystem::path get_resource_dir()
 {
-	return std::filesystem::current_path().string().append("\\resources\\");
+	auto path = std::filesystem::current_path() / std::filesystem::path("resources");
+	return path;
 }
 

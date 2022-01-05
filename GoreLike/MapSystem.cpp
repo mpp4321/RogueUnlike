@@ -124,8 +124,11 @@ void MapSystem::load_by_map_data(map_data&& map_component, unsigned int player_x
 
 void MapSystem::load_static_map_by_id(const std::string& id, unsigned int player_start_x, unsigned int player_start_y)
 {
+	using std::filesystem::path;
+
 	auto tmxMap = tmx::Map();
-	auto mapDir = std::filesystem::current_path().append(fmt::format("resources\\maps\\{}.tmx", id)).string();
+	auto string_file = fmt::format("{}.tmx", id);
+	auto mapDir = (get_resource_dir() / path("maps") / path(string_file)).string();
 	tmxMap.load( mapDir );
 	map_data && mapd = tiled_map_util::initialize_map(*mc_handle.registry(), tmxMap);
 	unsigned int w = mapd.width, h = mapd.height;

@@ -4,12 +4,12 @@
 #define SCREEN_HEIGHT 608
 
 #include "RandomUtil.h"
-#include "SDL_ttf.h"
+#include "SDL2/SDL_ttf.h"
 #include <iostream>
 #include <string>
 #include <unordered_map>
-#include "SDL.h"
-#include "SDL_image.h"
+#include "SDL2/SDL.h"
+#include "SDL2/SDL_image.h"
 #include "entt.hpp"
 #include <future>
 #include "json.hpp"

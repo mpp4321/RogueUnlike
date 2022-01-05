@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SDL.h"
+#include "SDL2/SDL.h"
 #include <string>
 #include <filesystem>
 
@@ -12,5 +12,5 @@ std::string get_stem(const std::string& str);
 
 std::string get_file_contents(const std::string& path);
 
-std::string get_resource_dir();
+std::filesystem::path get_resource_dir();
 
